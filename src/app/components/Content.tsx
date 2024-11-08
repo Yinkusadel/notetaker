@@ -53,9 +53,9 @@ const Content: React.FC = () => {
 
     const deleteNote = clientTrpc.note.delete.useMutation({
         onSuccess: () => {
-          void refetchNotes();
+            void refetchNotes();
         },
-      });
+    });
 
     return (
         <div className="mx-5 mt-5 grid grid-cols-4 gap-2">
@@ -102,8 +102,8 @@ const Content: React.FC = () => {
                 </div>
 
                 <NoteEditor
-                    onSave={({ title, content }) => {
-                        void createNote.mutate({
+                    onSave={async ({ title, content }) => {
+                        await createNote.mutateAsync({
                             title,
                             content,
                             topicId: selectedTopic?.id ?? "",
