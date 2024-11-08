@@ -32,7 +32,7 @@ const Content: React.FC = () => {
 
     const createTopic = clientTrpc.topic.create.useMutation({
         onSuccess: () => {
-            refetchTopics();
+            void refetchTopics();
         },
     });
 
@@ -47,7 +47,7 @@ const Content: React.FC = () => {
 
     const createNote = clientTrpc.note.create.useMutation({
         onSuccess: () => {
-            refetchNotes();
+            void refetchNotes();
         },
     });
 
