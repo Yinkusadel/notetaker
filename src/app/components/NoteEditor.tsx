@@ -1,4 +1,6 @@
+
 import { useState } from "react";
+
 import CodeMirror from "@uiw/react-codemirror";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import { languages } from "@codemirror/language-data";
@@ -6,24 +8,10 @@ import { languages } from "@codemirror/language-data";
 export const NoteEditor = ({
     onSave,
 }: {
-    onSave: (note: { title: string; content: string }) => Promise<void>; // Ensure onSave is async
+    onSave: (note: { title: string; content: string }) => void;
 }) => {
     const [code, setCode] = useState<string>("");
     const [title, setTitle] = useState<string>("");
-
-    const handleSave = async () => {
-        // Make the save operation async
-        if (title.trim().length > 0 && code.trim().length > 0) {
-            try {
-                // Call the onSave prop asynchronously
-                await onSave({ title, content: code });
-                setCode("");  // Clear content after saving
-                setTitle(""); // Clear title after saving
-            } catch (error) {
-                console.error("Error saving note:", error);
-            }
-        }
-    };
 
     return (
         <div className="card mt-5 border border-gray-200 bg-base-100 shadow-xl">
@@ -43,14 +31,23 @@ export const NoteEditor = ({
                     height="30vh"
                     minWidth="100%"
                     minHeight="30vh"
-                    extensions={[markdown({ base: markdownLanguage, codeLanguages: languages })]}
+                    extensions={[
+                        markdown({ base: markdownLanguage, codeLanguages: languages }),
+                    ]}
                     onChange={(value) => setCode(value)}
                     className="border border-gray-300"
                 />
             </div>
             <div className="card-actions justify-end">
                 <button
-                    onClick={handleSave} // Use async save handler
+                    onClick={() => {
+                        onSave({
+                            title,
+                            content: code,
+                        });
+                        setCode("");
+                        setTitle("");
+                    }}
                     className="btn-primary btn"
                     disabled={title.trim().length === 0 || code.trim().length === 0}
                 >
@@ -58,5 +55,5 @@ export const NoteEditor = ({
                 </button>
             </div>
         </div>
-    );
+    )
 };
